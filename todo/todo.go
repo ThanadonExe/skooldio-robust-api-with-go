@@ -5,8 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-
-	"github.com/thanadonexe/skooldio-robust-api-with-go/auth"
 )
 
 type Todo struct {
@@ -27,13 +25,6 @@ func NewTodoHandler(db *gorm.DB) *TodoHandler {
 }
 
 func (t *TodoHandler) NewTask(c *gin.Context) {
-	token := c.Request.Header.Get("Authorization")
-	err := auth.Protect(token)
-	if err != nil {
-		c.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
-
 	var todo Todo
 	if err := c.ShouldBindJSON(&todo); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
