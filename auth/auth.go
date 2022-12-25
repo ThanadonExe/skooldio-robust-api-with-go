@@ -13,7 +13,7 @@ func AccessToken(signature string) gin.HandlerFunc {
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(5 * time.Minute).Unix(),
 		})
-		ss, err := token.SignedString([]byte("==Signature=="))
+		ss, err := token.SignedString([]byte(signature))
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
