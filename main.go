@@ -25,7 +25,13 @@ var (
 )
 
 func main() {
-	err := godotenv.Load(".env")
+	_, err := os.Create("/tmp/live")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer os.Remove("/tmp/live")
+
+	err = godotenv.Load(".env")
 	if err != nil {
 		fmt.Println("Configuration file not found")
 	}
@@ -37,6 +43,10 @@ func main() {
 
 	db.AutoMigrate(&todo.Todo{})
 	r := gin.Default()
+	r.GET("/healthz", func(c *gin.Context) {
+		c.Status(200)
+	})
+
 	r.GET("/x", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"buildcommit": buildcommit,
