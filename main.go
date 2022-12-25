@@ -19,6 +19,11 @@ import (
 	"github.com/thanadonexe/skooldio-robust-api-with-go/todo"
 )
 
+var (
+	buildcommit = "dev"
+	buildtime   = time.Now().String()
+)
+
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -32,9 +37,10 @@ func main() {
 
 	db.AutoMigrate(&todo.Todo{})
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
+	r.GET("/x", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "pong",
+			"buildcommit": buildcommit,
+			"buildtime":   buildtime,
 		})
 	})
 
